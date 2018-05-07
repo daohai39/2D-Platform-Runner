@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NinjaGirl : MonoBehaviour {
+public class NinjaGirl : Enemy
+{   
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override void Move()
+    {
+        if (!Attack) {
+            Animator.SetFloat("speed", 1);
+            transform.Translate(speed * GetDirection() * Time.deltaTime);
+        }
+    }
+
+
 }

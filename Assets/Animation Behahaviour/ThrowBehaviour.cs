@@ -6,9 +6,14 @@ public class ThrowBehaviour : StateMachineBehaviour {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (Player.Instance.OnGround)
-			Player.Instance.Rigidbody.velocity = Vector2.zero;
-		Player.Instance.Attack = true;
+		if(animator.GetComponent<Enemy>() != null) {
+			animator.GetComponent<Enemy>().Attack = true;
+			animator.SetFloat("speed",0);
+		} else if (animator.GetComponent<Player>() != null) {
+			Player.Instance.Attack = true;
+			if (Player.Instance.OnGround)
+				Player.Instance.Rigidbody.velocity = Vector2.zero;
+		}
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -18,8 +23,12 @@ public class ThrowBehaviour : StateMachineBehaviour {
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Player.Instance.Attack = false;
-		Player.Instance.Animator.ResetTrigger("throw");
+		if(animator.GetComponent<Enemy>() != null) {
+			animator.GetComponent<Enemy>().Attack = false;
+		} else if (animator.GetComponent<Player>() != null) {
+			Player.Instance.Attack = false;
+			Player.Instance.Animator.ResetTrigger("throw");
+		}
 	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
