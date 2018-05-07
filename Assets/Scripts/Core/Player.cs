@@ -35,6 +35,10 @@ public class Player : MonoBehaviour {
 
 	[SerializeField] private List<Transform> groundChecks;
 	
+	[SerializeField] private GameObject knifePrefab;
+
+	[SerializeField] private Transform knifePos;
+
 	private bool isFacingRight;
 
 	public Rigidbody2D Rigidbody {get;private set;}
@@ -149,5 +153,19 @@ public class Player : MonoBehaviour {
 			Animator.SetLayerWeight(1,1.0f);
 		}
 	}
+
+
+	private void ThrowKnife(int value)
+	{
+		if (OnGround && value == 0 || !OnGround && value == 1) {
+			if (isFacingRight) {
+				GameObject tmp = (GameObject)Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(new Vector3(0,0, -90)));
+				tmp.GetComponent<Knife>().Initialize(Vector2.right);
+			} else {
+				GameObject tmp = (GameObject)Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(new Vector3(0,0, 90)));
+				tmp.GetComponent<Knife>().Initialize(Vector2.left);
+			}
+		}
+ 	}
 
 }
