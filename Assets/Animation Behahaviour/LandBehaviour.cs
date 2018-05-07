@@ -15,6 +15,7 @@ public class LandBehaviour : StateMachineBehaviour {
 		{
 			animator.SetBool("landing", false);
 			animator.ResetTrigger("jump");
+			Debug.Log("true");
 		}
 	}
 

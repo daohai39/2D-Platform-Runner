@@ -84,10 +84,13 @@ public class Player : MonoBehaviour {
 
 	private bool IsGrounded() 
 	{
-		foreach (Transform groundCheck in groundChecks) {
-			Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, whatIsGround);
-			foreach (Collider2D collider in colliders) {
-				if (collider.gameObject != gameObject) return true;
+		if (Rigidbody.velocity.y <= 0) //whether character is jumping or not
+		{
+			foreach (Transform groundCheck in groundChecks) {
+				Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, whatIsGround);
+				foreach (Collider2D collider in colliders) {
+					if (collider.gameObject != gameObject) return true;
+				}
 			}
 		}
 		return false;
@@ -103,7 +106,7 @@ public class Player : MonoBehaviour {
 		//Whether player is jumping
 		if (OnGround && Jump && !Slide) 
 		{
-			Rigidbody.AddForce(new Vector2(0, jumpForce));
+			Rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Force);
 		}
 		//Whether player can move
 		if (!Attack && !Slide && OnGround || airControl)
