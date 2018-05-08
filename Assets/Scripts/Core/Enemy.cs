@@ -17,17 +17,21 @@ public abstract class Enemy : MonoBehaviour {
 
 	public bool Attack { get; set; }
 
+	public abstract bool IsDead { get; }
+
 	protected bool isFacingRight;
 
-	private IEnemyState currentState;
+	protected IEnemyState currentState;
 
-	[SerializeField] private int health;
+	[SerializeField] protected int health = 30;
 
 	[SerializeField] private int point;
 
 	[SerializeField] protected float speed;
     [SerializeField] private float throwRange;
     [SerializeField] private float meleeRange;
+
+	[SerializeField] protected List<string> damageSources;
     public bool IsInMeleeRange {
         get {
             if(Target == null) return false;
@@ -53,8 +57,10 @@ public abstract class Enemy : MonoBehaviour {
 
 	protected virtual void Update () 
 	{
-		currentState.Execute();
-		LookAtTarget();
+		if(!IsDead){
+			currentState.Execute();
+			LookAtTarget();
+		}
 	}
 
 
@@ -90,13 +96,24 @@ public abstract class Enemy : MonoBehaviour {
 		transform.localScale = new Vector2(transform.localScale.x * - 1, transform.localScale.y);
 	}
 
-
 	public virtual void DestroySelf() 
 	{
 		gameObject.SetActive(false);
 	}
+
+	private	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (damageSources.Contains(other.tag)) {
+			Destroy(other.gameObject);
+			StartCoroutine(TakeDamage());
+		}
+		
+	}
+
 	// public abstract void Idle();
 	public abstract void Move();	
 	// public abstract void PerformAttack();
+
+	public abstract IEnumerator TakeDamage();
 
 }

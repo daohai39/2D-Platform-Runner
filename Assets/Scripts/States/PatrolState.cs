@@ -38,5 +38,7 @@ public class PatrolState : IEnemyState {
 	{
 		enemy.Animator.SetFloat("speed",1);
 	}
-
+	public void OnTriggerEnter2D(Collider2D other)
+	{
+	}
 }

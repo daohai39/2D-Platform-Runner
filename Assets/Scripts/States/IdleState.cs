@@ -30,4 +30,8 @@ public class IdleState : IEnemyState
 	{
     enemy.Animator.SetFloat("speed",0);
 	}
+
+  public void OnTriggerEnter2D(Collider2D other)
+  {
+  }
 }

@@ -42,5 +42,7 @@ public class RangedState : IEnemyState {
         enemy.Animator.SetTrigger("throw");
       } 
   }
-
+  public void OnTriggerEnter2D(Collider2D other)
+  {
+  }
 }

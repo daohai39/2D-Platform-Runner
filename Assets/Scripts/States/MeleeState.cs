@@ -42,4 +42,7 @@ public class MeleeState : IEnemyState {
         enemy.Animator.SetTrigger("attack");
       } 
   }
+  public void OnTriggerEnter2D(Collider2D other)
+  {
+  }
 }

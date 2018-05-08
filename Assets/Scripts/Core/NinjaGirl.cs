@@ -7,11 +7,28 @@ public class NinjaGirl : Enemy
     [SerializeField] private Transform knifePos;
     [SerializeField] private GameObject knifePrefab;
 
+    public override bool IsDead {
+        get { 
+            return health <= 0;
+        }
+    }
     public override void Move()
     {
         if (!Attack) {
             Animator.SetFloat("speed", 1);
             transform.Translate(speed * GetDirection() * Time.deltaTime);
+        }
+    }
+
+    public override IEnumerator TakeDamage()
+    {
+        Debug.Log("Trigger");
+        health -= 10;
+        if (IsDead) {
+            Animator.SetTrigger("die");
+            yield return null;
+        } else {
+            Animator.SetTrigger("damage");
         }
     }
 
@@ -25,4 +42,5 @@ public class NinjaGirl : Enemy
             tmp.GetComponent<Knife>().Initialize(Vector2.left);
         }
     }
+
 }

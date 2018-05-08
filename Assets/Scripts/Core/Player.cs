@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
 
 	//whether or not player can steer while jumping
 	[SerializeField] private bool airControl;
+	[SerializeField] protected List<string> damageSources;
 
 	[SerializeField] private LayerMask whatIsGround;
 
@@ -46,6 +47,11 @@ public class Player : MonoBehaviour {
 	public Animator Animator {get; private set;}
 
 
+    public  bool IsDead {
+        get { 
+            return health <= 0;
+        }
+    }
 	public bool Attack { get; set; }	
 
 	public bool Slide { get; set; }
@@ -167,5 +173,27 @@ public class Player : MonoBehaviour {
 			}
 		}
  	}
+
+    public  IEnumerator TakeDamage()
+    {
+        Debug.Log("Trigger");
+        health -= 10;
+        if (IsDead) {
+            Animator.SetTrigger("die");
+            yield return null;
+        } else {
+            Animator.SetTrigger("damage");
+        }
+    }
+
+
+	private	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (damageSources.Contains(other.tag)) {
+			Destroy(other.gameObject);
+			StartCoroutine(TakeDamage());
+		}
+		
+	}
 
 }
