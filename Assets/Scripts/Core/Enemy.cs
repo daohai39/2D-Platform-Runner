@@ -17,7 +17,7 @@ public abstract class Enemy : MonoBehaviour {
 
 	public bool Attack { get; set; }
 
-	private bool isFacingRight;
+	protected bool isFacingRight;
 
 	private IEnemyState currentState;
 
