@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	[SerializeField] private int health;
+	[SerializeField] private int maxHealth;
 	
 	[SerializeField] private float speed;
 
@@ -32,6 +32,8 @@ public class Player : MonoBehaviour {
 	[SerializeField] private bool airControl;
 
 	[SerializeField] private float immortalTime;
+
+	[SerializeField] private float deathTime;
 	[SerializeField] protected List<string> damageSources;
 
 	[SerializeField] private LayerMask whatIsGround;
@@ -46,6 +48,8 @@ public class Player : MonoBehaviour {
 
 	private bool isFacingRight;
 
+	private float currentHealth;
+	
 	private SpriteRenderer renderer;
 
 	public Rigidbody2D Rigidbody {get;private set;}
@@ -55,7 +59,7 @@ public class Player : MonoBehaviour {
 
     public  bool IsDead {
         get { 
-            return health <= 0;
+            return currentHealth <= 0;
         }
     }
 	public bool Attack { get; set; }	
@@ -75,6 +79,7 @@ public class Player : MonoBehaviour {
 	{
 		Id = 0;
 		isFacingRight = true;
+		currentHealth = maxHealth;
 		renderer = GetComponent<SpriteRenderer>();
 		Rigidbody = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator>();	
@@ -195,10 +200,13 @@ public class Player : MonoBehaviour {
     public  IEnumerator TakeDamage()
     {
 		if (!Immortal) {
-			health -= 10;
+			currentHealth -= 10;
 			if (IsDead) {
                 Animator.SetLayerWeight(1,0);
 				Animator.SetTrigger("die");
+				yield return new WaitForSeconds(deathTime);
+				currentHealth = maxHealth;
+				Respawn();
 			} else {
                 Animator.SetLayerWeight(1,0);
 				Animator.SetTrigger("damage");
@@ -210,6 +218,12 @@ public class Player : MonoBehaviour {
 		}
     }
 	
+	private void Respawn()
+	{
+		Animator.ResetTrigger("die");
+		transform.position = Vector2.zero;
+	}
+
 	private IEnumerator ImmortalState()
 	{
 		while(Immortal) {
