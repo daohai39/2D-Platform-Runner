@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NinjaGirl : Enemy
 {   
+	[SerializeField] private Collider2D swordCollider;
+
     [SerializeField] private Transform knifePos;
     [SerializeField] private GameObject knifePrefab;
 
@@ -20,9 +22,13 @@ public class NinjaGirl : Enemy
         }
     }
 
+	public override void MeleeAttack()
+	{
+		swordCollider.enabled = !swordCollider.enabled;
+	}
+
     public override IEnumerator TakeDamage()
     {
-        Debug.Log("Trigger");
         health -= 10;
         if (IsDead) {
             Animator.SetTrigger("die");

@@ -18,16 +18,17 @@ public class PatrolState : IEnemyState {
 
 	public void Execute()
 	{
-		Patroling();
-		enemy.Move();
 		if (Time.time - time >= patrolTime) {
 			enemy.ChangeState(new IdleState());
-		} else if (enemy.Target != null) {
+		} 
+		if (enemy.Target != null) {
 			if (enemy.IsInMeleeRange) 
 				enemy.ChangeState(new MeleeState());
-			else if (enemy.IsInThrowRange)
+			else if (!enemy.IsInMeleeRange && enemy.IsInThrowRange)
 				enemy.ChangeState(new RangedState());
 		}
+		Patroling();
+		enemy.Move();
 	}
 
 	public void Exit()

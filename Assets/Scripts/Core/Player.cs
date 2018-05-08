@@ -30,6 +30,8 @@ public class Player : MonoBehaviour {
 
 	//whether or not player can steer while jumping
 	[SerializeField] private bool airControl;
+
+	[SerializeField] private float immortalTime;
 	[SerializeField] protected List<string> damageSources;
 
 	[SerializeField] private LayerMask whatIsGround;
@@ -40,7 +42,11 @@ public class Player : MonoBehaviour {
 
 	[SerializeField] private Transform knifePos;
 
+	[SerializeField] private Collider2D swordCollider;
+
 	private bool isFacingRight;
+
+	private SpriteRenderer renderer;
 
 	public Rigidbody2D Rigidbody {get;private set;}
 	
@@ -60,6 +66,8 @@ public class Player : MonoBehaviour {
 
 	public bool OnGround { get; set; }
 
+	public bool Immortal { get; set; }
+
 	public bool Jump { get; set; }
 
 	// Use this for initialization
@@ -67,6 +75,7 @@ public class Player : MonoBehaviour {
 	{
 		Id = 0;
 		isFacingRight = true;
+		renderer = GetComponent<SpriteRenderer>();
 		Rigidbody = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator>();	
 	}
@@ -74,12 +83,16 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	private void Update () 
 	{
+		if(IsDead) return;
+		
 		HandleInput();	
+		
 	}
 
 
 	private void FixedUpdate() 
-	{
+	{	
+		if (IsDead) return;
 		var horizontal = Input.GetAxis("Horizontal");
 
 		OnGround = IsGrounded();
@@ -174,23 +187,43 @@ public class Player : MonoBehaviour {
 		}
  	}
 
+	public void MeleeAttack()
+	{
+		swordCollider.enabled = !swordCollider.enabled;
+	}
+
     public  IEnumerator TakeDamage()
     {
-        Debug.Log("Trigger");
-        health -= 10;
-        if (IsDead) {
-            Animator.SetTrigger("die");
-            yield return null;
-        } else {
-            Animator.SetTrigger("damage");
-        }
+		if (!Immortal) {
+			health -= 10;
+			if (IsDead) {
+                Animator.SetLayerWeight(1,0);
+				Animator.SetTrigger("die");
+			} else {
+                Animator.SetLayerWeight(1,0);
+				Animator.SetTrigger("damage");
+				Immortal = true;
+				StartCoroutine(ImmortalState());
+				yield return new WaitForSeconds(immortalTime);
+				Immortal = false;
+			}
+		}
     }
-
+	
+	private IEnumerator ImmortalState()
+	{
+		while(Immortal) {
+			renderer.enabled = false;
+			yield return new WaitForSeconds(.1f);
+			renderer.enabled = true;
+			yield return new WaitForSeconds(.1f);
+		}
+	}
 
 	private	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (damageSources.Contains(other.tag)) {
-			Destroy(other.gameObject);
+			if(other.tag == "EnemyKnife") Destroy(other.gameObject); //Destroy knife prefab when hit
 			StartCoroutine(TakeDamage());
 		}
 		

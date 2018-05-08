@@ -15,14 +15,14 @@ public class RangedState : IEnemyState {
 
     public void Execute()
     {
+      Attack();
+      enemy.Move();
       if (enemy.Target == null) {
         enemy.ChangeState(new IdleState());
       } 
       if (enemy.IsInMeleeRange) {
         enemy.ChangeState(new MeleeState());
       }
-      Attack();
-      enemy.Move();
     }
 
   public void Exit()
@@ -34,11 +34,12 @@ public class RangedState : IEnemyState {
   {
       if (time >= attackCd) {
         canAttack = true;
-        time = 0;
-      } 
+      } else {
+        time += Time.deltaTime;
+      }
       if (canAttack) {
         canAttack = false;
-        time += Time.deltaTime;
+        time = 0;
         enemy.Animator.SetTrigger("throw");
       } 
   }

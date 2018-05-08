@@ -104,7 +104,7 @@ public abstract class Enemy : MonoBehaviour {
 	private	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (damageSources.Contains(other.tag)) {
-			Destroy(other.gameObject);
+			if(other.tag == "Knife") Destroy(other.gameObject); // Destroy knife prefab or else it will collide with enemy sight
 			StartCoroutine(TakeDamage());
 		}
 		
@@ -113,7 +113,8 @@ public abstract class Enemy : MonoBehaviour {
 	// public abstract void Idle();
 	public abstract void Move();	
 	// public abstract void PerformAttack();
-
+	public abstract void MeleeAttack();
+	
 	public abstract IEnumerator TakeDamage();
 
 }

@@ -34,4 +34,5 @@ public class Knife : MonoBehaviour {
 	{
 		Destroy(gameObject);		
 	}
+
 }
