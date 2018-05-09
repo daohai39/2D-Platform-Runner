@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Knife : MonoBehaviour {
+public class RangeWeapon : MonoBehaviour {
 
 	private int id;
 

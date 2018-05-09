@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowBehaviour : StateMachineBehaviour {
+public class RangeAttackBehaviour : StateMachineBehaviour {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
@@ -27,7 +27,7 @@ public class ThrowBehaviour : StateMachineBehaviour {
 			animator.GetComponent<Enemy>().Attack = false;
 		} else if (animator.GetComponent<Player>() != null) {
 			Player.Instance.Attack = false;
-			Player.Instance.Animator.ResetTrigger("throw");
+			Player.Instance.Animator.ResetTrigger("rangeAttack");
 		}
 	}
 

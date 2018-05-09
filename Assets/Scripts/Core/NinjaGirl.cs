@@ -53,10 +53,10 @@ public class NinjaGirl : Enemy
     {
         if (isFacingRight) {
             GameObject tmp = (GameObject) Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(0,0,-90));
-            tmp.GetComponent<Knife>().Initialize(Vector2.right);
+            tmp.GetComponent<RangeWeapon>().Initialize(Vector2.right);
         } else {
             GameObject tmp = (GameObject) Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(0,0,90));
-            tmp.GetComponent<Knife>().Initialize(Vector2.left);
+            tmp.GetComponent<RangeWeapon>().Initialize(Vector2.left);
         }
     }
 

@@ -189,10 +189,10 @@ public class Player : MonoBehaviour {
 		if (OnGround && value == 0 || !OnGround && value == 1) {
 			if (isFacingRight) {
 				GameObject tmp = (GameObject)Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(new Vector3(0,0, -90)));
-				tmp.GetComponent<Knife>().Initialize(Vector2.right);
+				tmp.GetComponent<RangeWeapon>().Initialize(Vector2.right);
 			} else {
 				GameObject tmp = (GameObject)Instantiate(knifePrefab, knifePos.position, Quaternion.Euler(new Vector3(0,0, 90)));
-				tmp.GetComponent<Knife>().Initialize(Vector2.left);
+				tmp.GetComponent<RangeWeapon>().Initialize(Vector2.left);
 			}
 		}
  	}

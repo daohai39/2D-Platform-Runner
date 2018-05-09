@@ -27,7 +27,7 @@ public class RangedState : IEnemyState {
 
   public void Exit()
   {
-    enemy.Animator.ResetTrigger("throw");
+    enemy.Animator.ResetTrigger("rangeAttack");
   }
 
   public void Attack()
@@ -40,7 +40,7 @@ public class RangedState : IEnemyState {
       if (canAttack) {
         canAttack = false;
         time = 0;
-        enemy.Animator.SetTrigger("throw");
+        enemy.Animator.SetTrigger("rangeAttack");
       } 
   }
   public void OnTriggerEnter2D(Collider2D other)
