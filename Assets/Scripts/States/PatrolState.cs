@@ -10,7 +10,6 @@ public class PatrolState : IEnemyState {
 	private float patrolTime;
 	public void Enter(Enemy enemy)
 	{
-		Debug.Log("Patroling");
 		this.enemy = enemy;
 		time = Time.time;
 		patrolTime = Random.Range(1,10);

@@ -46,12 +46,12 @@ public class Player : MonoBehaviour {
 
 	[SerializeField] private Collider2D swordCollider;
 
-	[SerializeField] private float currentHealth;
-	
+	[SerializeField] private int currentHealth;
+
 	private bool isFacingRight;
 
 	
-	private SpriteRenderer renderer;
+	private SpriteRenderer spriteRenderer;
 
 	public Rigidbody2D Rigidbody {get;private set;}
 	
@@ -75,13 +75,17 @@ public class Player : MonoBehaviour {
 
 	public bool Jump { get; set; }
 
+	public int CurrentHealth {
+		 get { return currentHealth; }
+		 set { currentHealth = value; }
+	}
 	// Use this for initialization
 	private void Start () 
 	{
 		Id = 0;
 		isFacingRight = true;
 		currentHealth = maxHealth;
-		renderer = GetComponent<SpriteRenderer>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 		Rigidbody = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator>();	
 	}
@@ -228,9 +232,9 @@ public class Player : MonoBehaviour {
 	private IEnumerator ImmortalState()
 	{
 		while(Immortal) {
-			renderer.enabled = false;
+			spriteRenderer.enabled = false;
 			yield return new WaitForSeconds(.1f);
-			renderer.enabled = true;
+			spriteRenderer.enabled = true;
 			yield return new WaitForSeconds(.1f);
 		}
 	}
