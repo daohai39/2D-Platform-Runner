@@ -14,8 +14,6 @@ public class MeleeState : IEnemyState {
 
   public void Execute()
   {
-      Debug.Log(canAttack);
-      Debug.Log(time);
       Attack();
       enemy.Move();
       if (enemy.Target == null) {

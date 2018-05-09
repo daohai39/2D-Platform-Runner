@@ -25,7 +25,7 @@ public class AttackBehaviour : StateMachineBehaviour {
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		if(animator.GetComponent<Enemy>() != null) {
 			animator.GetComponent<Enemy>().Attack = false;
-			animator.GetComponent<Enemy>().MeleeAttack();
+			animator.GetComponent<Enemy>().PerformAttack();
 		} else if (animator.GetComponent<Player>() != null) {
 			Player.Instance.Attack = false;
 			Player.Instance.MeleeAttack();

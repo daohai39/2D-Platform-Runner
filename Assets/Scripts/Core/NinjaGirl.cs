@@ -22,10 +22,15 @@ public class NinjaGirl : Enemy
         }
     }
 
-	public override void MeleeAttack()
+	public override void PerformAttack()
 	{
 		swordCollider.enabled = !swordCollider.enabled;
 	}
+
+    public override void Die()
+    {
+        gameObject.SetActive(false);
+    }
 
     public override IEnumerator TakeDamage()
     {
@@ -37,6 +42,8 @@ public class NinjaGirl : Enemy
             Animator.SetTrigger("damage");
         }
     }
+
+    
 
     public void ThrowKnife() 
     {

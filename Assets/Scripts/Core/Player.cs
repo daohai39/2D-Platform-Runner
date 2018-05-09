@@ -46,9 +46,10 @@ public class Player : MonoBehaviour {
 
 	[SerializeField] private Collider2D swordCollider;
 
+	[SerializeField] private float currentHealth;
+	
 	private bool isFacingRight;
 
-	private float currentHealth;
 	
 	private SpriteRenderer renderer;
 
@@ -204,9 +205,6 @@ public class Player : MonoBehaviour {
 			if (IsDead) {
                 Animator.SetLayerWeight(1,0);
 				Animator.SetTrigger("die");
-				yield return new WaitForSeconds(deathTime);
-				currentHealth = maxHealth;
-				Respawn();
 			} else {
                 Animator.SetLayerWeight(1,0);
 				Animator.SetTrigger("damage");
@@ -218,10 +216,13 @@ public class Player : MonoBehaviour {
 		}
     }
 	
-	private void Respawn()
+	public void Respawn()
 	{
+		currentHealth = maxHealth;
 		Animator.ResetTrigger("die");
+		Animator.SetTrigger("idle");
 		transform.position = Vector2.zero;
+		Rigidbody.velocity = Vector2.zero;
 	}
 
 	private IEnumerator ImmortalState()
