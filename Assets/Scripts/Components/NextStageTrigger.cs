@@ -8,6 +8,8 @@ public class NextStageTrigger : MonoBehaviour {
 	{
 		if (other.GetComponent<Player>() != null)
 		{
+			var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+			SceneManager.LoadScene(currentSceneIndex+1);
 		}
 	}	
 }
