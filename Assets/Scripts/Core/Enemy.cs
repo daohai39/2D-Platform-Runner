@@ -32,6 +32,9 @@ public abstract class Enemy : MonoBehaviour {
     [SerializeField] private float meleeRange;
 
 	[SerializeField] protected List<string> damageSources;
+
+	[SerializeField] private Transform leftEgde;
+	[SerializeField] private Transform rightEgde;
     public bool IsInMeleeRange {
         get {
             if(Target == null) return false;
@@ -78,6 +81,12 @@ public abstract class Enemy : MonoBehaviour {
 				ChangeDirection(); 
 			}
 		}
+	}
+
+	protected bool IsOnEdge()
+	{
+		return (GetDirection().x > 0 && transform.position.x >= rightEgde.position.x 
+		|| GetDirection().x < 0 && transform.position.x <= leftEgde.position.x);
 	}
 
 	public void ChangeState(IEnemyState newState) 

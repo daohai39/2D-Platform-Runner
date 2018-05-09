@@ -16,9 +16,13 @@ public class NinjaGirl : Enemy
     }
     public override void Move()
     {
-        if (!Attack) {
-            Animator.SetFloat("speed", 1);
-            transform.Translate(speed * GetDirection() * Time.deltaTime);
+        if (!IsOnEdge()) {
+            if (!Attack) {
+                Animator.SetFloat("speed", 1);
+                transform.Translate(speed * GetDirection() * Time.deltaTime);
+            }
+        } else if (currentState is PatrolState) {
+            ChangeDirection();
         }
     }
 
