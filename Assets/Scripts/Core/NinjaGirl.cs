@@ -33,7 +33,7 @@ public class NinjaGirl : Enemy
 
     public override void Die()
     {
-        gameObject.SetActive(false);
+        DestroySelf();
     }
 
     public override IEnumerator TakeDamage()

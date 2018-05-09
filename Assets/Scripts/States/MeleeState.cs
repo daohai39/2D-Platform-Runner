@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MeleeState : IEnemyState {
 	private Enemy enemy;
-  private float attackCd = 5;
   private float time;
   private bool canAttack = true;
   public void Enter(Enemy enemy)
@@ -32,7 +31,7 @@ public class MeleeState : IEnemyState {
 
   public void Attack()
   {
-      if (time >= attackCd) {
+      if (time >= enemy.AttackCd) {
         canAttack = true;
       } else {
         time += Time.deltaTime;

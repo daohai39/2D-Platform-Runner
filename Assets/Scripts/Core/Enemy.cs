@@ -8,6 +8,8 @@ public abstract class Enemy : MonoBehaviour {
 	private int id;
 
 	public int Id { get; set; }
+	
+	public float AttackCd { get { return attackCd; } }
 
 	public Animator Animator { get; private set; }
 
@@ -26,6 +28,8 @@ public abstract class Enemy : MonoBehaviour {
 	[SerializeField] protected int health = 30;
 
 	[SerializeField] private int point;
+
+  	[SerializeField] private float attackCd = 5;
 
 	[SerializeField] protected float speed;
     [SerializeField] private float throwRange;
