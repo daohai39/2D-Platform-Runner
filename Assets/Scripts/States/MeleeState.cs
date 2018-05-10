@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeState : IEnemyState {
+public class MeleeState : IEnemyState<Enemy> {
 	private Enemy enemy;
   private float time;
   private bool canAttack = true;

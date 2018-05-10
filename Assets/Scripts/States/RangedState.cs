@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedState : IEnemyState {
+public class RangedState : IEnemyState<Enemy> {
 	private Enemy enemy;
   private float attackCd = 5;
   private float time;

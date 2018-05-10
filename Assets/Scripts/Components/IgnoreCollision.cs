@@ -12,6 +12,7 @@ public class IgnoreCollision : MonoBehaviour {
 	{
 		playerCollider = Player.Instance.GetComponent<BoxCollider2D>();
 		Physics2D.IgnoreCollision(collisionPlatform, triggerPlatform, true);
+		Physics2D.IgnoreCollision(collisionPlatform, GameObject.FindObjectOfType<Boss>().GetComponent<BoxCollider2D>(), true);
 	}
 	
 	void OnTriggerEnter2D(Collider2D other)

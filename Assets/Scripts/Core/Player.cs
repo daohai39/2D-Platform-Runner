@@ -2,25 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void DeadEventHandler();
+
 public class Player : MonoBehaviour {
+
 	private int _id;
+	public int Id { get; private set; }
 
-        public Player(int id, Rigidbody2D rigidbody, Animator animator, bool attack, bool slide, bool running, bool onGround, bool immortal, bool jump) 
-        {
-            this.Id = id;
-                this.Rigidbody = rigidbody;
-                this.Animator = animator;
-                this.Attack = attack;
-                this.Slide = slide;
-                this.Running = running;
-                this.OnGround = onGround;
-                this.Immortal = immortal;
-                this.Jump = jump;
-               
-        }
-        	public int Id { get; private set; }
-	
-
+	public event DeadEventHandler Dead;
 	private static Player _instance;
 
 	public static Player Instance {
@@ -71,6 +60,9 @@ public class Player : MonoBehaviour {
 
     public  bool IsDead {
         get { 
+			if (health.CurrentHealth <= 0) {
+				OnDead();
+			}
             return health.CurrentHealth <= 0;
         }
 		set {
@@ -108,7 +100,6 @@ public class Player : MonoBehaviour {
 	{
 		if(IsDead) return;
 		HandleInput();	
-		
 	}
 
 
@@ -239,6 +230,13 @@ public class Player : MonoBehaviour {
 		Animator.SetTrigger("idle");
 		transform.position = Vector2.zero;
 		Rigidbody.velocity = Vector2.zero;
+	}
+
+	public void OnDead()
+	{
+		if (Dead != null) {
+			Dead();
+		}
 	}
 
 	private IEnumerator ImmortalState()

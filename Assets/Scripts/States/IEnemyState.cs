@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemyState {
-	void Enter(Enemy enemy);
+public interface IEnemyState<T> where T : class {
+	void Enter(T enemy);
 	void Execute();
 	void Exit();
 

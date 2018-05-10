@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : IEnemyState
+public class IdleState : IEnemyState<Enemy>
 {
 	private Enemy enemy;
 	private float time;

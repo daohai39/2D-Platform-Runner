@@ -34,7 +34,7 @@ public abstract class Enemy : MonoBehaviour {
 
 	protected bool isFacingRight;
 
-	protected IEnemyState currentState;
+	protected IEnemyState<Enemy> currentState;
 
 	[SerializeField] private int point;
 
@@ -65,6 +65,7 @@ public abstract class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start () {
+		Player.Instance.Dead += new DeadEventHandler(RemoveTarget);
 		health = GetComponent<Health>();
 		IsDead = false;
 		Animator = GetComponent<Animator>();
@@ -105,7 +106,7 @@ public abstract class Enemy : MonoBehaviour {
 		|| GetDirection().x < 0 && transform.position.x <= leftEgde.position.x);
 	}
 
-	public void ChangeState(IEnemyState newState) 
+	public void ChangeState(IEnemyState<Enemy> newState) 
 	{
 		if (newState == null)
 			return;
@@ -124,6 +125,12 @@ public abstract class Enemy : MonoBehaviour {
 	public virtual void DestroySelf() 
 	{
 		gameObject.SetActive(false);
+	}
+
+	public void RemoveTarget() 
+	{
+		Target = null;
+		ChangeState(new PatrolState());
 	}
 
 	public virtual IEnumerator TakeDamage(int amount) 

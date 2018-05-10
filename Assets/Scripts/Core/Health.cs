@@ -19,8 +19,13 @@ public class Health : MonoBehaviour {
 		} 
 	}
 
+	public int MaxHealth {
+		get {
+			return maxHealth;
+		}
+	}
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		currentHealth = maxHealth;
 	}
 
@@ -32,7 +37,7 @@ public class Health : MonoBehaviour {
 		}
 		if (healthBar != null)  {
 			healthBar.sizeDelta = new Vector2(
-				currentHealth,
+				(float)currentHealth/maxHealth*100,
 				healthBar.sizeDelta.y
 			);
 		}

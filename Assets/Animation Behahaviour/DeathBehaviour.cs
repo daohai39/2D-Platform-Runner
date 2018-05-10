@@ -13,6 +13,8 @@ public class DeathBehaviour : StateMachineBehaviour {
 			animator.GetComponent<Player>().Rigidbody.velocity = Vector2.zero;
 		else if (animator.GetComponent<Enemy>() != null)
 			animator.GetComponent<Enemy>().Rigidbody2D.velocity = Vector2.zero;
+		else if (animator.GetComponent<Boss>() != null)
+			animator.GetComponent<Boss>().Rgbody.velocity = Vector2.zero;
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -23,6 +25,8 @@ public class DeathBehaviour : StateMachineBehaviour {
 				animator.GetComponent<Player>().Respawn();
 			else if (animator.GetComponent<Enemy>() != null)
 				animator.GetComponent<Enemy>().Die();
+			else if (animator.GetComponent<Boss>() != null)
+				animator.GetComponent<Boss>().Die();
 		}
 	}
 
