@@ -8,12 +8,6 @@ public class NinjaGirl : Enemy
 
     [SerializeField] private Transform knifePos;
     [SerializeField] private GameObject knifePrefab;
-
-    public override bool IsDead {
-        get { 
-            return health <= 0;
-        }
-    }
     public override void Move()
     {
         if (!IsOnEdge()) {
@@ -34,20 +28,7 @@ public class NinjaGirl : Enemy
     public override void Die()
     {
         DestroySelf();
-    }
-
-    public override IEnumerator TakeDamage()
-    {
-        health -= 10;
-        if (IsDead) {
-            Animator.SetTrigger("die");
-            yield return null;
-        } else {
-            Animator.SetTrigger("damage");
-        }
-    }
-
-    
+    }    
 
     public void ThrowKnife() 
     {

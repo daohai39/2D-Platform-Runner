@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 public abstract class Enemy : MonoBehaviour {
 	private int id;
 
@@ -19,13 +18,23 @@ public abstract class Enemy : MonoBehaviour {
 
 	public bool Attack { get; set; }
 
-	public abstract bool IsDead { get; }
+	private bool isDead;
+
+	public virtual bool IsDead { 
+		get {
+			return health.CurrentHealth <= 0;
+		}
+		set {
+			if (value == true) {
+				health.CurrentHealth = 0;
+			}
+			isDead = value;
+		}
+	}
 
 	protected bool isFacingRight;
 
 	protected IEnemyState currentState;
-
-	[SerializeField] protected int health = 30;
 
 	[SerializeField] private int point;
 
@@ -39,6 +48,7 @@ public abstract class Enemy : MonoBehaviour {
 
 	[SerializeField] private Transform leftEgde;
 	[SerializeField] private Transform rightEgde;
+	[SerializeField] private Health health;
     public bool IsInMeleeRange {
         get {
             if(Target == null) return false;
@@ -55,6 +65,8 @@ public abstract class Enemy : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start () {
+		health = GetComponent<Health>();
+		IsDead = false;
 		Animator = GetComponent<Animator>();
 		Rigidbody2D = GetComponent<Rigidbody2D>();	
 		isFacingRight = true;
@@ -114,12 +126,24 @@ public abstract class Enemy : MonoBehaviour {
 		gameObject.SetActive(false);
 	}
 
+	public virtual IEnumerator TakeDamage(int amount) 
+	{
+		health.TakeDamage(amount);
+        if (IsDead) {
+            Animator.SetTrigger("die");
+            yield return null;
+        } else {
+            Animator.SetTrigger("damage");
+        }
+	}
+
 	private	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (IsDead) return;
-		if (damageSources.Contains(other.tag)) {
+		if (damageSources.Contains(other.tag)) {		
+			Debug.Log((other.GetComponent<DamageManagement>().DamageOutput));	
+			StartCoroutine(TakeDamage(other.GetComponent<DamageManagement>().DamageOutput));
 			if(other.tag == "Knife") Destroy(other.gameObject); // Destroy knife prefab or else it will collide with enemy sight
-			StartCoroutine(TakeDamage());
 		}
 		
 	}
@@ -130,6 +154,5 @@ public abstract class Enemy : MonoBehaviour {
 
 	public abstract void Die();
 	
-	public abstract IEnumerator TakeDamage();
 
 }

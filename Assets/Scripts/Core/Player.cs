@@ -5,7 +5,20 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 	private int _id;
 
-	public int Id { get; private set; }
+        public Player(int id, Rigidbody2D rigidbody, Animator animator, bool attack, bool slide, bool running, bool onGround, bool immortal, bool jump) 
+        {
+            this.Id = id;
+                this.Rigidbody = rigidbody;
+                this.Animator = animator;
+                this.Attack = attack;
+                this.Slide = slide;
+                this.Running = running;
+                this.OnGround = onGround;
+                this.Immortal = immortal;
+                this.Jump = jump;
+               
+        }
+        	public int Id { get; private set; }
 	
 
 	private static Player _instance;
@@ -19,9 +32,7 @@ public class Player : MonoBehaviour {
 			return _instance;
 		}
 	}
-	
-	[SerializeField] private int maxHealth;
-	
+		
 	[SerializeField] private float speed;
 
 	[SerializeField] private float jumpForce;
@@ -46,22 +57,28 @@ public class Player : MonoBehaviour {
 
 	[SerializeField] private Collider2D swordCollider;
 
-	[SerializeField] private int currentHealth;
-
 	private bool isFacingRight;
 
-	
 	private SpriteRenderer spriteRenderer;
+
+	private Health health;
 
 	public Rigidbody2D Rigidbody {get;private set;}
 	
 	public Animator Animator {get; private set;}
 
+	private bool isDead;
 
     public  bool IsDead {
         get { 
-            return currentHealth <= 0;
+            return health.CurrentHealth <= 0;
         }
+		set {
+			if (value == true) {
+				health.CurrentHealth = 0;
+			} 
+			isDead = value;
+		}
     }
 	public bool Attack { get; set; }	
 
@@ -75,16 +92,12 @@ public class Player : MonoBehaviour {
 
 	public bool Jump { get; set; }
 
-	public int CurrentHealth {
-		 get { return currentHealth; }
-		 set { currentHealth = value; }
-	}
 	// Use this for initialization
 	private void Start () 
 	{
 		Id = 0;
 		isFacingRight = true;
-		currentHealth = maxHealth;
+		health = GetComponent<Health>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		Rigidbody = GetComponent<Rigidbody2D>();
 		Animator = GetComponent<Animator>();	
@@ -94,7 +107,6 @@ public class Player : MonoBehaviour {
 	private void Update () 
 	{
 		if(IsDead) return;
-		
 		HandleInput();	
 		
 	}
@@ -155,7 +167,7 @@ public class Player : MonoBehaviour {
 			Animator.SetTrigger("attack");
 		}
 		if (Input.GetKeyDown(KeyCode.X)) {
-			Animator.SetTrigger("throw");
+			Animator.SetTrigger("rangeAttack");
 		}
 		if (Input.GetKeyDown(KeyCode.LeftShift)) {
 			Animator.SetTrigger("slide");
@@ -202,10 +214,10 @@ public class Player : MonoBehaviour {
 		swordCollider.enabled = !swordCollider.enabled;
 	}
 
-    public  IEnumerator TakeDamage()
+    public  IEnumerator TakeDamage(int amount)
     {
 		if (!Immortal) {
-			currentHealth -= 10;
+			health.TakeDamage(amount);
 			if (IsDead) {
                 Animator.SetLayerWeight(1,0);
 				Animator.SetTrigger("die");
@@ -222,7 +234,7 @@ public class Player : MonoBehaviour {
 	
 	public void Respawn()
 	{
-		currentHealth = maxHealth;
+		health.Reset();
 		Animator.ResetTrigger("die");
 		Animator.SetTrigger("idle");
 		transform.position = Vector2.zero;
@@ -241,9 +253,9 @@ public class Player : MonoBehaviour {
 
 	private	void OnTriggerEnter2D(Collider2D other)
 	{
-		if (damageSources.Contains(other.tag)) {
-			if(other.tag == "EnemyKnife") Destroy(other.gameObject); //Destroy knife prefab when hit
-			StartCoroutine(TakeDamage());
+		if (damageSources.Contains(other.tag)) { //Destroy knife prefab when hit
+			StartCoroutine(TakeDamage(other.GetComponent<DamageManagement>().DamageOutput));
+			if(other.tag == "EnemyKnife") Destroy(other.gameObject);
 		}
 		
 	}

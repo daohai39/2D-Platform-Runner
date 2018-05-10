@@ -7,7 +7,7 @@ public class OutOfGameTrigger : MonoBehaviour {
 	{
 		if (other.GetComponent<Player>() != null)
 		{
-			Player.Instance.CurrentHealth = 0;
+			Player.Instance.IsDead = true;
 			Player.Instance.Animator.SetTrigger("die");
 		}
 	}

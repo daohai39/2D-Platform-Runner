@@ -6,12 +6,6 @@ public class Zombie : Enemy
 {
 	[SerializeField] private Collider2D attackRange;
 
-    public override bool IsDead 
-	{
-		get {
-			return health <= 0;
-		}
-	}
 
     public override void Die()
     {
@@ -34,17 +28,7 @@ public class Zombie : Enemy
 
     public override void PerformAttack()
     {
-		attackRange.enabled = !attackRange.enabled;
+			attackRange.enabled = !attackRange.enabled;
     }
 
-    public override IEnumerator TakeDamage()
-    {
-		health -= 10;
-		if (IsDead) {
-			Animator.SetTrigger("die");
-			yield return null;
-		} else {
-			Animator.SetTrigger("damage");
-		}
-    }
 }
